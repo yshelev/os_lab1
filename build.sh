@@ -1,10 +1,10 @@
-echo git pull
+echo pull new version from git
 git pull
 
 mkdir -p build
 
-echo make
+echo compile files
 make
 
-echo
+echo exec file
 build/main

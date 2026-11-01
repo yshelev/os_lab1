@@ -1,13 +1,13 @@
 @echo off
 chcp 65001 > nul
 
-echo git pull
+echo pull new version from git
 git pull
 
 if not exist build mkdir build
 
-echo make
+echo compile files
 make 
 
-echo 
-build/main.exe
+echo exec file
+build\main.exe

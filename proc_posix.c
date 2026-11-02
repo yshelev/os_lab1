@@ -1,4 +1,4 @@
-#include "proc_win.h"
+#include "proc.h"
 
 #ifndef _WIN32
 

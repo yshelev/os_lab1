@@ -10,10 +10,8 @@ enum {
 
 typedef struct wt_proc wt_proc;
 
-#ifdef _WIN32
-    #include "proc_win.h"
-#else
-    #include "proc_posix.h"
-#endif
+int wt_start(const char *const argv[], wt_proc **out);
+int wt_wait(wt_proc *p, int *exit_code);
+void wt_free(wt_proc *p);
 
 #endif

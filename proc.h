@@ -2,16 +2,16 @@
 #define PROC_H
 
 enum {
-    OK = 0,
-    BAD_PARAMETERS = 10,
-    NO_MEMORY = 11,
-    PROCESS_FAILED = 12
+    WT_OK = 0,
+    WT_BAD_PARAMETERS = 10,
+    WT_NO_MEMORY = 11,
+    WT_PROCESS_FAILED = 12
 };
 
-typedef struct proc proc;
+typedef struct wt_proc wt_proc;
 
-int start(const char *const argv[], proc **out);
-int wait(proc *p, int *exit_code);
-void free(proc *p);
+int wt_start(const char *const argv[], wt_proc **out);
+int wt_wait(wt_proc *p, int *exit_code);
+void wt_free(wt_proc *p);
 
 #endif

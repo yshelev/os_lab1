@@ -6,25 +6,25 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-struct proc {
+struct wt_proc {
     pid_t pid;
 };
 
-int start(const char *const argv[], proc **out) {
+int wt_start(const char *const argv[], wt_proc **out) {
     if (!argv || !argv[0] || !out) {
-        return BAD_PARAMETERS;
+        return WT_BAD_PARAMETERS;
     }
     *out = NULL;
 
-    proc *p = malloc(sizeof *p);
+    wt_proc *p = malloc(sizeof *p);
     if (!p) {
-        return NO_MEMORY;
+        return WT_NO_MEMORY;
     }
 
     p->pid = fork();
     if (p->pid < 0) {
         free(p);
-        return PROCESS_FAILED;
+        return WT_PROCESS_FAILED;
     }
     if (p->pid == 0) {                      
         execvp(argv[0], (char *const *)argv);
@@ -32,22 +32,22 @@ int start(const char *const argv[], proc **out) {
     }
 
     *out = p;
-    return OK;
+    return WT_OK;
 }
 
-int wait(proc *p, int *exit_code) {
+int wt_wait(wt_proc *p, int *exit_code) {
     if (!p || !exit_code) {
-        return BAD_PARAMETERS;
+        return WT_BAD_PARAMETERS;
     }
     int status;
     if (waitpid(p->pid, &status, 0) == -1) {
-        return PROCESS_FAILED;
+        return WT_PROCESS_FAILED;
     }
     *exit_code = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
-    return OK;
+    return WT_OK;
 }
 
-void free(proc *p) {
+void wt_free(wt_proc *p) {
     free(p);
 }
 

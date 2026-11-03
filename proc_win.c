@@ -5,26 +5,26 @@
 #include <process.h>
 #include <stdlib.h>
 
-struct proc {
+struct wt_proc {
     intptr_t pid;
 };
 
-int start(const char *const argv[], proc **out) {
+int wt_start(const char *const argv[], wt_proc **out) {
     if (!argv || !argv[0] || !out) {
-        return BAD_PARAMETERS;
+        return WT_BAD_PARAMETERS;
     }
     *out = NULL;
 
-    proc *p = malloc(sizeof *p);
+    wt_proc *p = malloc(sizeof *p);
     if (!p) {
-        return NO_MEMORY;
+        return WT_NO_MEMORY;
     }
 
     intptr_t h = _spawnvp(_P_NOWAIT, argv[0], argv);
     
     if (h == -1) {
         free(p);
-        return PROCESS_FAILED; 
+        return WT_PROCESS_FAILED; 
     }
 
     p->pid = h;
@@ -32,18 +32,18 @@ int start(const char *const argv[], proc **out) {
     return 0;
 }
 
-int wait(proc *p, int *exit_code) {
+int wt_wait(wt_proc *p, int *exit_code) {
     if (!p || !exit_code) {
-        return BAD_PARAMETERS;
+        return WT_BAD_PARAMETERS;
     }
 
     if (_cwait(exit_code, p->pid, 0) == -1){
-        return PROCESS_FAILED;
+        return WT_PROCESS_FAILED;
     } 
     return 0;
 }
 
-void free(proc *p) {
+void wt_free(wt_proc *p) {
     if (!p) return;
     free(p);
 }

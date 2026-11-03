@@ -8,24 +8,24 @@ int main(void) {
         const char *const argv[] = {"sleep", "3", NULL};
     #endif
 
-    proc *p = NULL;
+    wt_proc *p = NULL;
     int code = 0;
 
-    int rc = start(argv, &p);
-    if (rc != OK) {
+    int rc = wt_start(argv, &p);
+    if (rc != WT_OK) {
         printf("start failed: %d\n", rc);
         return 1;
     }
 
     printf("process started, waiting...\n");
 
-    rc = wait(p, &code);
-    if (rc == OK) {
+    rc = wt_wait(p, &code);
+    if (rc == WT_OK) {
         printf("process exited with code %d\n", code);
     } else {
         printf("wait failed: %d\n", rc);
     }
 
-    free(p);
+    wt_free(p);
     return 0;
 }

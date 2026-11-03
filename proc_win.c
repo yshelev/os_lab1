@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 struct wt_proc {
-    intptr_t h_pid;
+    intptr_t pid;
 };
 
 int wt_start(const char *const argv[], wt_proc **out) {
@@ -27,7 +27,7 @@ int wt_start(const char *const argv[], wt_proc **out) {
         return WT_PROCESS_FAILED; 
     }
 
-    p->h_pid = h;
+    p->pid = h;
     *out = p;
     return 0;
 }
@@ -37,7 +37,7 @@ int wt_wait(wt_proc *p, int *exit_code) {
         return WT_BAD_PARAMETERS;
     }
 
-    if (_cwait(exit_code, p->h_pid, 0) == -1){
+    if (_cwait(exit_code, p->pid, 0) == -1){
         return WT_PROCESS_FAILED;
     } 
     return 0;

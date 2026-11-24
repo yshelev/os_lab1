@@ -25,7 +25,7 @@ SharedMemoryErrors createSharedMem(char *shm_name, int shm_size, shm_file_type *
         _fd = (intptr_t) __crt_shm_posix(shm_name, shm_size);
     #endif
     if (_fd < 0) {
-        return _fd; 
+        return (SharedMemoryErrors)_fd;
     }
     out->file_descriptor = _fd;
 
@@ -36,11 +36,12 @@ SharedMemoryErrors createSharedMem(char *shm_name, int shm_size, shm_file_type *
         _mmap = __map_shm_posix(_fd, shm_size);
     #endif
 
-    if (_mmap < 0) {
-        return (SharedMemoryErrors)(intptr_t)_mmap;
+    if (_mmap == NULL || _mmap == (void*)(intptr_t)SHM_CREATE_POINTER_ERR) {
+        return SHM_CREATE_POINTER_ERR;
     }
 
     out->mapped_memory_ptr = _mmap;
+    out->shm_size = shm_size;
     return SHM_OK;
 }
 
@@ -104,11 +105,10 @@ void* __map_shm_win(intptr_t fd, int shm_size) {
 }
 #else
 void* __map_shm_posix(intptr_t fd, int shm_size) {
-    void *ptr = mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-    if (ptr == -1 || ptr == NULL)
-    {
-        close(fd);
-        return SHM_CREATE_POINTER_ERR;
+    void *ptr = mmap(NULL, shm_size, PROT_READ | PROT_WRITE, MAP_SHARED, (int)fd, 0);
+    if (ptr == MAP_FAILED) {
+        close((int)fd);
+        return (void*)(intptr_t)SHM_CREATE_POINTER_ERR;
     }
     return ptr;
 }
@@ -121,7 +121,7 @@ void __cls_shm_win(shm_file_type *shm_obj) {
 }
 #else
 void __cls_shm_posix(shm_file_type *shm_obj) {
-    munmap(shm_obj->mapped_memory_ptr);
-    close(shm_obj->file_descriptor);
+    munmap(shm_obj->mapped_memory_ptr, (size_t)shm_obj->shm_size);
+    close((int)shm_obj->file_descriptor);
 }
 #endif

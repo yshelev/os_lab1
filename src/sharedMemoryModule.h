@@ -12,6 +12,7 @@ typedef enum {
 typedef struct {
     intptr_t file_descriptor;
     void* mapped_memory_ptr;
+    int shm_size;
 } shm_file_type;
 
 int writeValueToMemory(shm_file_type *shm_obj, int value);

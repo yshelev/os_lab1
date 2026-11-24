@@ -8,6 +8,7 @@
 #ifdef _WIN32
     #include <windows.h>
 #else
+    #include <sys/wait.h>
     #include <unistd.h>
 #endif
 
@@ -99,6 +100,9 @@ static int launchCopy(int which) {
 #endif
 }
 static void spawnCopies(void) {
+    #ifndef _WIN32
+        while (waitpid(-1, NULL, WNOHANG) > 0) {}
+    #endif
     lockShm();
     int need[2] = { !pidAlive(COPY1), !pidAlive(COPY2) };
     int old[2]  = { COPY1, COPY2 };

@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     if (strcmp(type, "cli") == 0) {
         if (!initLock()) return 1;
         if (createSharedMem(SHM_NAME, SHM_SIZE, &g_shm) != SHM_OK) { closeLock(); return 1; }
-        printf("cli: введите число счетчика\n");
+        printf("cli: enter counter value\n");
         char line[128];
         while (fgets(line, sizeof line, stdin)) {
             int v;
@@ -30,9 +30,9 @@ int main(int argc, char **argv) {
                 lockShm();
                 writeValueToMemory(&g_shm, v);
                 unlockShm();
-                printf("текущий counter = %d\n", v);
+                printf("counter = %d\n", v);
             } else {
-                printf("введите число\n");
+                printf("enter a number\n");
             }
         }
         closeSharedMem(&g_shm);

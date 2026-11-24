@@ -1,11 +1,11 @@
-echo обновление из git
+echo git pull
 git pull
 
-echo настройка сборки
+echo cmake
 cmake -S . -B build
 
-echo компиляция
+echo compile
 cmake --build build
 
-echo запуск
+echo run
 build/main

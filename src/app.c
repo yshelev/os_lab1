@@ -118,14 +118,6 @@ static void spawnCopies(void) {
             continue;
         }
         int pid = launchCopy(which);
-        if (pid < 0) {
-            char msg[128];
-            lockShm();
-            snprintf(msg, sizeof msg, "spawn copy%d failed", which);
-            logMsg(msg);
-            unlockShm();
-            continue;
-        }
         lockShm();
         ((int*)g_shm.mapped_memory_ptr)[1 + which] = pid;
         unlockShm();

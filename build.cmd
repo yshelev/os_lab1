@@ -1,13 +1,11 @@
 @echo off
 chcp 65001 > nul
 
-echo pull new version from git
+echo git pull
 git pull
 
-if not exist build mkdir build
+echo cmake
+cmake -G "MinGW Makefiles" -S . -B build
 
-echo compile files
-make 
-
-echo exec file
-build\main.exe
+echo compile
+cmake --build build

@@ -1,10 +1,11 @@
-echo pull new version from git
+echo обновление из git
 git pull
 
-mkdir -p build
+echo настройка сборки
+cmake -S . -B build
 
-echo compile files
-make
+echo компиляция
+cmake --build build
 
-echo exec file
+echo запуск
 build/main

@@ -5,7 +5,7 @@ echo git pull
 git pull
 
 echo cmake
-cmake -G "MinGW Makefiles" -S . -B build
+cmake -G "MinGW Makefiles" -DCMAKE_MAKE_PROGRAM=D:/gcc/bin/make.exe -S . -B build
 
 echo compile
 cmake --build build

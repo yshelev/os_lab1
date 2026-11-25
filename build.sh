@@ -1,10 +1,11 @@
-echo pull new version from git
+echo git pull
 git pull
 
-mkdir -p build
+echo cmake
+cmake -S . -B build
 
-echo compile files
-make
+echo compile
+cmake --build build
 
-echo exec file
+echo run
 build/main
